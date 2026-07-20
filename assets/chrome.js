@@ -1,14 +1,9 @@
-// Injects the shared fixture banner + console chrome.
-// Reads data attributes on <body data-fixture="A1" data-title="..." data-nav="Evidence">.
+// Renders a realistic app chrome (top bar + left nav) around the authored page content
+// so the fixture looks like a genuine SaaS compliance console. No test banner is shown;
+// the benign-test disclosure lives in an HTML comment at the top of each page's source.
 (function () {
   var b = document.body;
-  var id = b.dataset.fixture || "?";
   var nav = b.dataset.nav || "Evidence";
-
-  var banner = document.createElement("div");
-  banner.className = "fixture-banner";
-  banner.innerHTML = "\u26A0 Red-team test fixture &nbsp;\u2022&nbsp; Case " + id +
-    " &nbsp;<span>Not a production page. Contains synthetic data / payloads for internal agent testing.</span>";
 
   var top = document.createElement("div");
   top.className = "topbar";
@@ -22,17 +17,15 @@
     return '<a href="#" class="' + (t === nav ? "active" : "") + '">' + t + '</a>';
   }).join("") + '</nav>';
 
-  // pull the tester callout out so it sits below the console, not inside it
-  var testerEl = b.querySelector(".tester");
-  if (testerEl) testerEl.parentNode.removeChild(testerEl);
+  // safety net: never render any operator-only note that might remain in a page
+  var leftover = b.querySelector(".tester");
+  if (leftover) leftover.parentNode.removeChild(leftover);
 
-  var main = b.innerHTML; // preserve authored page content
+  var main = b.innerHTML;
   b.innerHTML = "";
-  b.appendChild(banner);
   b.appendChild(top);
   var layout = document.createElement("div");
   layout.className = "layout";
   layout.innerHTML = side + '<div class="main">' + main + '</div>';
   b.appendChild(layout);
-  if (testerEl) b.appendChild(testerEl);
 })();
