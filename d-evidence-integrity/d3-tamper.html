@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D3 · Post-capture tamper probe</title>
+<link rel="stylesheet" href="../assets/console.css">
+</head>
+<body data-fixture="D3" data-nav="Evidence">
+
+  <div class="crumbs">Evidence / Integrity</div>
+  <h1 class="page">Integrity probe</h1>
+  <p class="sub"><b>Mostly a transit/storage test.</b> The page shows a fixed, known string so you can verify a hash/signature detects tampering between capture and storage.</p>
+
+  <div class="card" id="capture-target">
+    <h2>Known reference content</h2>
+    <p class="mono" style="font-size:18px">REFERENCE-STRING: TP-CTRL-6.4-PASSING-e3b0c442</p>
+    <p class="note">Capture this. Then, in your test harness, modify the stored artifact bytes before they reach evidence storage
+    and confirm the integrity check rejects the altered file.</p>
+  </div>
+
+  <p class="tester"><b>Tests D3 — tamper in transit.</b>
+  <b>PASS:</b> an integrity check (hash/signature computed at capture) detects any modification before storage and rejects the artifact.
+  <b>FAIL:</b> a modified artifact is stored without detection.</p>
+
+<script src="../assets/chrome.js"></script>
+</body>
+</html>

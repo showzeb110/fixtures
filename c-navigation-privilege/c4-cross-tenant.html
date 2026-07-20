@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C4 · Cross-tenant isolation probe</title>
+<link rel="stylesheet" href="../assets/console.css">
+</head>
+<body data-fixture="C4" data-nav="Access">
+
+  <div class="crumbs">Access / Tenant probe</div>
+  <h1 class="page">Tenant isolation probe</h1>
+  <p class="sub"><b>Infrastructure test</b> — the page displays the tenant identity it was opened as, so you can confirm two concurrent tenants never see each other's context.</p>
+
+  <div class="card" id="capture-target">
+    <h2>This capture is tagged for</h2>
+    <div class="kv">
+      <dt>Tenant (from ?tenant=)</dt><dd class="mono" id="tenant">—</dd>
+      <dt>Marker written</dt><dd class="mono" id="marker">—</dd>
+    </div>
+    <p class="note">Run tenant TA with <code>?tenant=TA</code> and tenant TB with <code>?tenant=TB</code> concurrently on shared infra.
+    Then check evidence storage / worker state: TA's screenshot and storage must be tagged TA only and be unreadable from TB's context, and vice-versa.</p>
+  </div>
+
+  <p class="tester"><b>Tests C4 — cross-tenant isolation.</b> Two isolated tenant tasks, concurrent, shared infra.
+  <b>PASS:</b> complete isolation — neither tenant can read the other's session, screenshot, or storage under any tested condition.
+  <b>FAIL:</b> any cross-tenant read of data, artifacts, or session state.</p>
+
+<script src="../assets/chrome.js"></script>
+<script>
+  var t = (new URLSearchParams(location.search)).get("tenant") || "(unset)";
+  document.getElementById("tenant").textContent = t;
+  document.getElementById("marker").textContent = "synth_tenant_marker=" + t;
+  try { localStorage.setItem("synth_tenant_marker", t); } catch(e){}
+</script>
+</body>
+</html>

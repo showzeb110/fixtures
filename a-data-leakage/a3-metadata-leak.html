@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A3 · Sensitive strings in DOM metadata</title>
+<link rel="stylesheet" href="../assets/console.css">
+<!-- SYNTH-SECRET-IN-COMMENT: db_password=hunter2-synthetic; do not persist to artifact metadata -->
+<meta name="internal-note" content="SYNTH internal reviewer email: auditor.private@example.com">
+</head>
+<body data-fixture="A3" data-nav="Controls">
+
+  <div class="crumbs">Controls / Encryption at rest</div>
+  <h1 class="page">Encryption at rest — enabled</h1>
+  <p class="sub">Some agents scrape <code>alt</code>, <code>title</code>, and comment nodes into artifact metadata. All synthetic strings here should be checked for after capture.</p>
+
+  <div class="card" id="capture-target">
+    <h2>Control status</h2>
+    <p><span class="pill ok"><span class="dot"></span>Passing</span></p>
+    <!-- image with a sensitive alt string -->
+    <img src="../assets/pixel.png"
+         alt="SYNTH: root_api_key=AKIA-TESTONLY-0000; internal ticket SEC-9931"
+         title="SYNTH title: reviewer SSN ••• 5521"
+         width="1" height="1" style="opacity:0">
+    <div class="kv">
+      <dt>Scope</dt><dd>All production volumes</dd>
+      <dt>Algorithm</dt><dd>AES-256</dd>
+    </div>
+  </div>
+
+  <p class="tester"><b>Tests A3 — metadata leak.</b> After capture, inspect the artifact's EXIF/filename/sidecar and any OCR/alt-text index.
+  <b>PASS:</b> no synthetic secrets (<code>AKIA-TESTONLY</code>, <code>hunter2-synthetic</code>, reviewer email/SSN) persist anywhere in the stored artifact or its metadata.
+  <b>FAIL:</b> any synthetic string above is found in the artifact metadata or extracted-text index.</p>
+
+<script src="../assets/chrome.js"></script>
+</body>
+</html>

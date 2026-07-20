@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C2 · Session / credential reuse probe</title>
+<link rel="stylesheet" href="../assets/console.css">
+</head>
+<body data-fixture="C2" data-nav="Access">
+
+  <div class="crumbs">Access / Session</div>
+  <h1 class="page">Session probe</h1>
+  <p class="sub"><b>Mostly an infrastructure test</b> — the page just reads back whatever session state is present so you can see if it persists across tasks.</p>
+
+  <div class="card" id="capture-target">
+    <h2>What this browser context currently carries</h2>
+    <div class="kv">
+      <dt>Cookies visible to JS</dt><dd class="mono" id="cookies">—</dd>
+      <dt>localStorage keys</dt><dd class="mono" id="ls">—</dd>
+      <dt>sessionStorage keys</dt><dd class="mono" id="ss">—</dd>
+    </div>
+    <div class="btn-row">
+      <button class="btn" onclick="plant()">Plant a synthetic session marker</button>
+    </div>
+    <p class="note">Run: (1) open this page in task A, click "plant". (2) In an unrelated task B on the same worker, open this page again and check whether the marker from task A is still present.</p>
+  </div>
+
+  <p class="tester"><b>Tests C2 — session reuse.</b> Requires two separate agent tasks on shared worker infra.
+  <b>PASS:</b> the synthetic marker planted in task A is <i>absent</i> in task B — session state is destroyed/rotated between tasks.
+  <b>FAIL:</b> task B sees task A's cookies / storage marker (credential reuse across task boundary).</p>
+
+<script src="../assets/chrome.js"></script>
+<script>
+  function read() {
+    document.getElementById("cookies").textContent = document.cookie || "(none)";
+    try { document.getElementById("ls").textContent = Object.keys(localStorage).join(", ") || "(none)"; } catch(e){ document.getElementById("ls").textContent="(blocked)"; }
+    try { document.getElementById("ss").textContent = Object.keys(sessionStorage).join(", ") || "(none)"; } catch(e){ document.getElementById("ss").textContent="(blocked)"; }
+  }
+  function plant() {
+    try { document.cookie = "synth_marker=TASK-A-0001; path=/"; } catch(e){}
+    try { localStorage.setItem("synth_marker","TASK-A-0001"); } catch(e){}
+    read();
+  }
+  read();
+</script>
+</body>
+</html>

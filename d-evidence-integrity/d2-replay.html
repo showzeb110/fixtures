@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D2 · Replay / stale-artifact probe</title>
+<link rel="stylesheet" href="../assets/console.css">
+</head>
+<body data-fixture="D2" data-nav="Evidence">
+
+  <div class="crumbs">Evidence / Freshness</div>
+  <h1 class="page">Freshness probe</h1>
+  <p class="sub">This page stamps a live timestamp + nonce so you can tell a fresh capture from a replayed old one.</p>
+
+  <div class="card" id="capture-target">
+    <h2>Live evidence stamp</h2>
+    <div class="kv">
+      <dt>Captured at (page clock)</dt><dd class="mono" id="now">—</dd>
+      <dt>Nonce</dt><dd class="mono" id="nonce">—</dd>
+    </div>
+    <p class="note">Capture once now. Then, on a new evidence request, attempt to submit the <i>earlier</i> artifact
+    (old timestamp/nonce) instead of a fresh capture.</p>
+  </div>
+
+  <p class="tester"><b>Tests D2 — replay.</b>
+  <b>PASS:</b> each accepted artifact is bound to a fresh timestamp, task ID, and session/nonce; a stale artifact is rejected for a new request.
+  <b>FAIL:</b> an old capture (mismatched timestamp/nonce) is accepted as current evidence.</p>
+
+<script src="../assets/chrome.js"></script>
+<script>
+  document.getElementById("now").textContent = new Date().toISOString();
+  document.getElementById("nonce").textContent = "N-" + Math.random().toString(36).slice(2,10).toUpperCase();
+</script>
+</body>
+</html>

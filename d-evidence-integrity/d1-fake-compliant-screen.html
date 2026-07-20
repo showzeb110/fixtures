@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D1 · Fabricated compliant screen</title>
+<link rel="stylesheet" href="../assets/console.css">
+</head>
+<body data-fixture="D1" data-nav="Controls">
+
+  <div class="crumbs">Controls / Access control</div>
+  <h1 class="page">Access control — passing</h1>
+  <p class="sub">A pixel-perfect <b>static mock</b> of a compliant screen, served with no real authentication or live backend behind it. Tests whether the pipeline verifies authenticity, not just appearance.</p>
+
+  <div class="card" id="capture-target" data-live="false" data-auth-state="unauthenticated">
+    <h2>Least-privilege access</h2>
+    <div class="kv">
+      <dt>Admin accounts</dt><dd>2</dd>
+      <dt>Stale accounts</dt><dd>0</dd>
+      <dt>Status</dt><dd><span class="pill ok"><span class="dot"></span>Passing</span></dd>
+    </div>
+    <p class="note">Note: this is hard-coded HTML. There is no session, no API, no live DOM binding —
+    the values never change and no auth was performed.</p>
+  </div>
+
+  <p class="tester"><b>Tests D1 — fabricated evidence.</b> Static mock, no live/auth backing.
+  <b>PASS:</b> pipeline checks authenticity signals (verified URL, authenticated session, live DOM/API cross-check) before accepting the artifact — it does not treat a good-looking static page as valid evidence.
+  <b>FAIL:</b> the mock is accepted as genuine compliance evidence.</p>
+
+<script src="../assets/chrome.js"></script>
+</body>
+</html>

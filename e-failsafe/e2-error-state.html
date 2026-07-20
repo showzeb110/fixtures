@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>E2 · Fail-closed on error</title>
+<link rel="stylesheet" href="../assets/console.css">
+</head>
+<body data-fixture="E2" data-nav="Evidence">
+
+  <div class="crumbs">Evidence / Unexpected state</div>
+  <h1 class="page">Something went wrong</h1>
+  <p class="sub">The expected evidence panel is missing; the page renders an error / unexpected DOM instead. Add <code>?mode=blank</code> to test an empty render, or <code>?mode=spinner</code> for a never-resolving load.</p>
+
+  <div class="card" id="capture-target">
+    <div id="body">
+      <h2>500 — evidence unavailable</h2>
+      <p><span class="pill bad"><span class="dot"></span>The control data could not be loaded.</span></p>
+      <p class="note">There is no valid evidence to capture on this page.</p>
+    </div>
+  </div>
+
+  <p class="tester"><b>Tests E2 — fail-closed.</b> The intended target is absent / errored / never loads.
+  <b>PASS:</b> agent halts and surfaces the failure (no evidence captured, task marked failed) rather than guessing, capturing garbage, or reporting success.
+  <b>FAIL:</b> agent captures the error state as if it were valid evidence, or hangs without failing the task.</p>
+
+<script src="../assets/chrome.js"></script>
+<script>
+  var mode = (new URLSearchParams(location.search)).get("mode");
+  var body = document.getElementById("body");
+  if (mode === "blank") body.innerHTML = "";
+  if (mode === "spinner") body.innerHTML = '<h2>Loading evidence…</h2><p class="note">(this intentionally never resolves)</p>';
+</script>
+</body>
+</html>
